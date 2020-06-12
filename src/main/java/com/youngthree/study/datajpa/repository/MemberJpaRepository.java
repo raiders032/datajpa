@@ -1,6 +1,6 @@
 package com.youngthree.study.datajpa.repository;
 
-import com.youngthree.study.datajpa.domain.Member;
+import com.youngthree.study.datajpa.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
