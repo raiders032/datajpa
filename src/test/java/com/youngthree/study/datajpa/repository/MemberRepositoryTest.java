@@ -74,4 +74,19 @@ class MemberRepositoryTest {
         Assertions.assertThat(findList.size()).isEqualTo(1);
     }
 
+    @Test
+    public void findByUsernameAndAgeGreaterThan_query(){
+        Member m1 = new Member("nys",10);
+        Member m2 = new Member("nys",20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> findList = memberRepository.findUser("nys",15);
+        Member findMember = findList.get(0);
+
+        Assertions.assertThat(findMember.getAge()).isEqualTo(20);
+        Assertions.assertThat(findMember.getUsername()).isEqualTo("nys");
+        Assertions.assertThat(findList.size()).isEqualTo(1);
+    }
+
 }
