@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -122,5 +125,21 @@ class MemberRepositoryTest {
         assertThat(memberDto.getUsername()).isEqualTo(member.getUsername());
         assertThat(memberDto.getTeamName()).isEqualTo(member.getTeam().getName());
     }
+
+
+    @Test
+    public void findByName(){
+        Member m1 = new Member("nys",10);
+        Member m2 = new Member("bhk",20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> findList = memberRepository.findByName(Arrays.asList("nys","bhk"));
+        for(Member member :findList){
+            System.out.println(member.getUsername());
+        }
+    }
+
 
 }
