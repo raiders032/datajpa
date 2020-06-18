@@ -2,9 +2,12 @@ package com.youngthree.study.datajpa.repository;
 
 import com.youngthree.study.datajpa.dto.MemberDto;
 import com.youngthree.study.datajpa.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
 
 import java.util.Collection;
 import java.util.List;
@@ -25,5 +28,11 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
     @Query("select m from Member m where m.username in :names")
     List<Member> findByName(@Param("names")Collection<String> names);
 
+    Page<Member> findByAge(int age, Pageable pageable);
 
+    //countQuery를 분리할 수 있음
+    @Query(value="select m from Member m left join m.team",
+            countQuery="select m from Member m"
+    )
+    Page<Member> findAllCountBy(Pageable pagealbe);
 }
