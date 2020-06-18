@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,6 +19,9 @@ class MemberJpaRepositoryTest {
 
     @Autowired
     private MemberJpaRepository memberJpaRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Test
     public void testMember(){
@@ -97,5 +102,25 @@ class MemberJpaRepositoryTest {
         //then
         assertThat(members.size()).isEqualTo(3);
         assertThat(totalCount).isEqualTo(5);
+    }
+
+    @Test
+    public void bulkAgePlus(){
+        //given
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member2",20));
+        memberJpaRepository.save(new Member("member3",30));
+        memberJpaRepository.save(new Member("member4",40));
+        Long id = memberJpaRepository.save(new Member("member5",50)).getId();
+
+        //when
+        int count = memberJpaRepository.bulkAgePlus(30);
+        em.clear();
+
+        //then
+        Member member = memberJpaRepository.findById(id).get();
+        assertThat(count).isEqualTo(3);
+        assertThat(member.getAge()).isEqualTo(51);
+
     }
 }
