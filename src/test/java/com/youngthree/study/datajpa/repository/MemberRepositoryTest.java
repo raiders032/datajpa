@@ -275,5 +275,9 @@ class MemberRepositoryTest {
         }
     }
 
+    @Test
+    public void customRepository(){
+        List<Member> allCustom = memberRepository.findAllCustom();
+    }
 
 }
