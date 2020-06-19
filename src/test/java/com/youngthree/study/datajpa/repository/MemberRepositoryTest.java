@@ -196,5 +196,84 @@ class MemberRepositoryTest {
 
     }
 
+    //Lazy loading test
+    @Test
+    public void findMemberLazy(){
+        //given
+        Team team1 = new Team("team1");
+        Team team2 = new Team("team2");
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+
+        Member member1 = new Member("member1",10, team1);
+        Member member2 = new Member("member2", 10, team2);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        //when N+1 문제 발생!!
+        List<Member> members = memberRepository.findAll();
+
+        for(Member member : members){
+            System.out.println("member : "+ member);
+            System.out.println("member.team.class : "+ member.getTeam().getClass());
+            System.out.println("member.team : "+ member.getTeam().getName());
+        }
+    }
+
+    @Test
+    public void findMemberFetchJoinLazy(){
+        //given
+        Team team1 = new Team("team1");
+        Team team2 = new Team("team2");
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+
+        Member member1 = new Member("member1",10, team1);
+        Member member2 = new Member("member2", 10, team2);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        //when 위에 테스트와 비교해 보자 fetch join을 적용해서 N+1 문제를 해결했다.
+        List<Member> members = memberRepository.findMemberFetchJoin();
+
+        for(Member member : members){
+            System.out.println("member : "+ member);
+            System.out.println("member.team.class : "+ member.getTeam().getClass());
+            System.out.println("member.team : "+ member.getTeam().getName());
+        }
+    }
+
+    @Test
+    public void findMemberEntityGraphLazy(){
+        //given
+        Team team1 = new Team("team1");
+        Team team2 = new Team("team2");
+        teamRepository.save(team1);
+        teamRepository.save(team2);
+
+        Member member1 = new Member("member1",10, team1);
+        Member member2 = new Member("member2", 10, team2);
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        em.flush();
+        em.clear();
+
+        //when 위에 테스트와 비교해 보자 entity graph을 적용해서 N+1 문제를 해결했다.
+        List<Member> members = memberRepository.findMemberEntityGraph();
+
+        for(Member member : members){
+            System.out.println("member : "+ member);
+            System.out.println("member.team.class : "+ member.getTeam().getClass());
+            System.out.println("member.team : "+ member.getTeam().getName());
+        }
+    }
+
 
 }
