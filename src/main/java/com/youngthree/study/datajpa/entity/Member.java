@@ -1,17 +1,14 @@
 package com.youngthree.study.datajpa.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of={"id","username","age"})
-public class Member {
+public class Member extends BaseEntity{
 
     @Id @GeneratedValue
     @Column(name="member_id")

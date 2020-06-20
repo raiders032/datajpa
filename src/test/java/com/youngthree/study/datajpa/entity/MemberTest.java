@@ -1,5 +1,6 @@
 package com.youngthree.study.datajpa.entity;
 
+import com.youngthree.study.datajpa.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,9 @@ class MemberTest {
 
     @Autowired
     private EntityManager em;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     public void memberTest(){
@@ -42,6 +46,28 @@ class MemberTest {
             System.out.println("member : "+ member);
             System.out.println("member.team : "+ member.getTeam());
         }
+    }
+
+    @Test
+    public void BaseEntityTest() throws InterruptedException {
+        Member member = new Member("nys", 10);
+        memberRepository.save(member);
+
+        Thread.sleep(100);
+        member.setUsername("nys2");
+
+        em.flush();
+        em.clear();
+
+        //when
+        Member findMember = memberRepository.findById(member.getId()).get();
+
+        //then
+        System.out.println("findMember.createdDate = " + findMember.getCreatedDate());
+        System.out.println("findMember.updatedDate = " + findMember.getLastModifiedDate());
+        System.out.println("findMember.createdBy = " + findMember.getCreatedBy());
+        System.out.println("findMember.updatedBy = " + findMember.getLastModifiedBY());
+
 
     }
 }
